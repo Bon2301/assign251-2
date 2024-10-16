@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 
 public class MemAppender {
     private static Logger LOG;
-    private static List<String> logList;
+    private static List<String> logList = new ArrayList<String>();
     private static int maxSize;
     private static String pattern;
     private static Layout layout;
@@ -32,14 +32,18 @@ public class MemAppender {
         super();
         BasicConfigurator.configure();
         LOG = Logger.getLogger("Log");
+        LOG.setLevel(Level.ALL);
         maxSize = 2;
         curSize = 0;
         discLogs = 0;
-        LOG.setLevel(Level.ALL);
         append = (Appender)LOG.getAllAppenders().nextElement();
         pattern = "%p: %d{dd/MM/yyyy} in %t - %m%n";
         layout = new org.apache.log4j.PatternLayout(pattern);
         append.setLayout(layout);
+        for(int i=0; i<maxSize; i++){
+            logList.add("testString");
+        }
+        System.out.println(logList);
 
     }
     private MemAppender() {}
@@ -53,15 +57,15 @@ public class MemAppender {
         System.out.println("object successfully created");
     }
     public void addLog(String x){
-        curSize++;
-        if(curSize > maxSize){
-            System.out.println("max reached");
-            logList.removeFirst();
-            logList.add(x);
-        }
-        else {
-            logList.add(x);
-        }
+//        curSize++;
+//        if(curSize>maxSize) {
+//            logList.removeFirst();
+//            logList.add(x);
+//        } else{
+//            logList.add(x);
+//        }
+        logList.removeFirst();
+        logList.add(x);
     }
     public void getCurrentLogs(){
         for(int i=0; i<logList.size(); i++){
@@ -86,6 +90,9 @@ public class MemAppender {
     }
     public String getCurrentList(int i){
         return logList.get(i);
+    }
+    public int getMaxSize(){
+        return maxSize;
     }
 
 

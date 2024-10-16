@@ -2,12 +2,10 @@ package org.example;
 
 
 import org.junit.Test;
-
-import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 
 public class Test3 {
-MemAppender ma = MemAppender.getInstance();
+    MemAppender ma = MemAppender.getInstance();
 
     @Test
     public void addingTest() throws Exception{
