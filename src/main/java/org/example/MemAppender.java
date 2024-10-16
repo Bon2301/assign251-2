@@ -24,15 +24,23 @@ public class MemAppender {
     private static int maxSize;
     private static String pattern;
     private static Layout layout;
+    private static Appender append;
+    private static int curSize;
+    private static long discLogs;
 
-    private MemAppender(Logger LOG, String pattern, Layout layout){
+    private MemAppender(Logger LOG, String pattern, Layout layout, Appender append){
         super();
         BasicConfigurator.configure();
         LOG = Logger.getLogger("Log");
         maxSize = 2;
+        curSize = 0;
+        discLogs = 0;
         LOG.setLevel(Level.ALL);
-        pattern = "%p: %d{dd/MM/yyyy HH:mm:ss} in %t - %m%n";
+        append = (Appender)LOG.getAllAppenders().nextElement();
+        pattern = "%p: %d{dd/MM/yyyy} in %t - %m%n";
         layout = new org.apache.log4j.PatternLayout(pattern);
+        append.setLayout(layout);
+
     }
     private MemAppender() {}
 
@@ -45,8 +53,39 @@ public class MemAppender {
         System.out.println("object successfully created");
     }
     public void addLog(String x){
-        String s = LOG.info("test");
-        logList.add(s);
+        curSize++;
+        if(curSize > maxSize){
+            System.out.println("max reached");
+            logList.removeFirst();
+            logList.add(x);
+        }
+        else {
+            logList.add(x);
+        }
+    }
+    public void getCurrentLogs(){
+        for(int i=0; i<logList.size(); i++){
+            LOG.info(logList.get(i));
+        }
+    }
+    public void getEventStrings(){
+        for(int i=0; i<logList.size(); i++){
+            System.out.println(logList.get(i));
+        }
+    }
+    public void printLogs(){
+        for(int i=0; i<logList.size(); i++){
+            LOG.info(logList.get(i));
+        }
+        discLogs += logList.size();
+        logList.clear();
+    }
+    public void getDiscardedLogCount(){
+        System.out.println("Total discarded logs:");
+        System.out.println(discLogs);
+    }
+    public String getCurrentList(int i){
+        return logList.get(i);
     }
 
 

@@ -4,14 +4,15 @@ package org.example;
 import org.junit.Test;
 
 import static org.hamcrest.core.StringContains.containsString;
+import static org.junit.Assert.assertEquals;
 
 public class Test3 {
 MemAppender ma = MemAppender.getInstance();
 
     @Test
-    public void outputTest() throws Exception{
-        //insert stuff here
-        assert(OutContent.toString(), containsString("a"));
+    public void addingTest() throws Exception{
+        ma.addLog("This is Log 1");
+        assertEquals(ma.getCurrentList(0),"This is Log 1");
     }
 
 }
