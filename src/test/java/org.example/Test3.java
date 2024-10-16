@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.hamcrest.core.StringContains.containsString;
 
 public class Test3 {
-int a = 5;
+MemAppender ma = MemAppender.getInstance();
 
     @Test
     public void outputTest() throws Exception{
