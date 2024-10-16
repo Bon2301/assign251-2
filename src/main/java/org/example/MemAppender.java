@@ -1,8 +1,6 @@
 package org.example;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,15 +20,19 @@ import org.apache.log4j.Logger;
 
 public class MemAppender {
     private static Logger LOG;
-    private static DateFormat DATE_FORMAT;
-    private static List<Logger> logList;
+    private static List<String> logList;
+    private static int maxSize;
+    private static String pattern;
+    private static Layout layout;
 
-    private MemAppender(Logger LOG, DateFormat DATE_FORMAT){
+    private MemAppender(Logger LOG, String pattern, Layout layout){
         super();
         BasicConfigurator.configure();
         LOG = Logger.getLogger("Log");
-        DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
-
+        maxSize = 2;
+        LOG.setLevel(Level.ALL);
+        pattern = "%p: %d{dd/MM/yyyy HH:mm:ss} in %t - %m%n";
+        layout = new org.apache.log4j.PatternLayout(pattern);
     }
     private MemAppender() {}
 
@@ -41,6 +43,10 @@ public class MemAppender {
     }
     public void check(){
         System.out.println("object successfully created");
+    }
+    public void addLog(String x){
+        String s = LOG.info("test");
+        logList.add(s);
     }
 
 
