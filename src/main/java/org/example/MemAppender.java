@@ -38,7 +38,7 @@ public class MemAppender {
         LOG = Logger.getLogger("Log");
         LOG.setLevel(Level.ALL);
         //the maxSize variable can be changed to suit however many the user wants
-        maxSize = 2;
+        maxSize = 1000;
         curSize = 0;
         discLogs = 0;
         //setup of the appender and the layout
@@ -52,7 +52,6 @@ public class MemAppender {
         public void setVL(){
         vc = new VelocityContext();
         template = Velocity.getTemplate("template.vm");
-        layoutVP = "Velocity";
         vc.put("c", "%c");
         vc.put("d", "%d{dd/MM/yyyy}");
         vc.put("m", "%m");
@@ -60,7 +59,7 @@ public class MemAppender {
         vc.put("t", "%t");
         vc.put("n", "%n");
         layout = new org.apache.log4j.PatternLayout(pattern);
-
+        layoutVP = "Velocity";
         }
         //setup pattern layout
         public void setPL(String patternToBeUsed){
