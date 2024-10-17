@@ -24,6 +24,7 @@ public class MemAppender {
     private static Layout layout;
     private static long curSize;
     private static long discLogs;
+    private static String layoutVP;
 
     private static VelocityContext vc;
     private static VelocityEngine ve;
@@ -44,6 +45,7 @@ public class MemAppender {
         pattern = "%p - %d{dd MMM yyyy} in %t - %m";
         layout = new org.apache.log4j.PatternLayout(pattern);
         LOG.addAppender(append);
+        layoutVP = "Pattern";
     }
         //Setup velocity layout
         public void setVL(){
@@ -52,7 +54,7 @@ public class MemAppender {
         template = Velocity.getTemplate("template.vm");
         ve.setProperty( RuntimeConstants.RUNTIME_LOG_INSTANCE, "org.apache.velocity.runtime.log.Log4JLogChute");
         ve.setProperty("runtime.log.logsystem.log4j.logger", "LOG");
-        ve.init();
+        layoutVP = "Velocity";
         }
         //setup pattern layout
         public void setPL(String patternToBeUsed){
@@ -61,6 +63,7 @@ public class MemAppender {
             pattern = patternToBeUsed;
             layout = new org.apache.log4j.PatternLayout(pattern);
             LOG.addAppender(append);
+            layoutVP = "Pattern";
         }
 
         //setup of the singleton pattern
@@ -130,14 +133,21 @@ public class MemAppender {
 
 
         public String getLogAsString(int i){
+            String s = "";
             StringWriter sw = new StringWriter();
-            WriterAppender  wa = new WriterAppender(layout, sw);
-            LOG.addAppender(wa);
-            LOG.info(logList.get(i));
-            String s = sw.toString();
-            LOG.removeAppender(wa);
+            if(layoutVP.equals("Pattern")) {
+                WriterAppender wa = new WriterAppender(layout, sw);
+                LOG.addAppender(wa);
+                LOG.info(logList.get(i));
+                s = sw.toString();
+                LOG.removeAppender(wa);
+            } else if(layoutVP.equals("Velocity")) {
+                
+                vc.put("log", logList.get(i));
+                template.merge(vc, sw);
+                s = sw.toString();
+            }
             return s;
-
         }
 
 
