@@ -44,6 +44,13 @@ public class Test3 {
         ma.discardLog(0);
     }
 
+    @Test
+    public void sizeTest(){
+        assertEquals(0, ma.getCurSize());
+        assertEquals(2, ma.getMaxSize());
+        assertEquals(4,ma.getDiscLogs());
+    }
+
 
 
 }

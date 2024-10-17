@@ -22,7 +22,7 @@ public class MemAppender {
     private static Appender append;
     private static String pattern;
     private static Layout layout;
-    private static int curSize;
+    private static long curSize;
     private static long discLogs;
 
     private MemAppender(){
@@ -50,6 +50,7 @@ public class MemAppender {
         public void check () {
             System.out.println("object successfully created");
         }
+        //this function is used so the user can change the layout
         public void setLayout(String patternToBeUsed){
             LOG.removeAppender(append);
             append = LOG.getAppender("appender");
@@ -108,6 +109,10 @@ public class MemAppender {
         public long getMaxSize() {
             return maxSize;
         }
+        public long getCurSize(){return curSize;}
+
+        public long getDiscLogs(){return discLogs;}
+
 
         public String getLogAsString(int i){
             StringWriter sw = new StringWriter();
