@@ -143,11 +143,13 @@ public class MemAppender {
             StringWriter sw = new StringWriter();
             WriterAppender wa = new WriterAppender(layout, sw);
             StringWriter swV = new StringWriter();
+            //if template chosen is normal Pattern
             if(layoutVP.equals("Pattern")) {
                 LOG.addAppender(wa);
                 LOG.info(logList.get(i));
                 s = sw.toString();
                 LOG.removeAppender(wa);
+            //if template chosen is Velocity
             } else if(layoutVP.equals("Velocity")) {
                 template.merge(vc,sw);
                 pattern = sw.toString();
