@@ -105,7 +105,7 @@ public class MemAppender {
             return logList.get(i);
         }
 
-        //this is used to get the max size that the list can be
+        //this is used to get the sizes that the list can be
         public long getMaxSize() {
             return maxSize;
         }

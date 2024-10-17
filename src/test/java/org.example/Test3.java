@@ -2,11 +2,7 @@ package org.example;
 
 
 import org.junit.Test;
-
-import java.io.CharArrayWriter;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 public class Test3 {
     MemAppender ma = MemAppender.getInstance();
