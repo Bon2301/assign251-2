@@ -42,8 +42,9 @@ public class Test3 {
 
     @Test
     public void sizeTest(){
+        ma.setMaxSize(10);
         assertEquals(0, ma.getCurSize());
-        assertEquals(1000, ma.getMaxSize());
+        assertEquals(10, ma.getMaxSize());
         assertEquals(4,ma.getDiscLogs());
     }
 
@@ -52,7 +53,7 @@ public class Test3 {
         String s = "velocity test";
         ma.addLog(s);
         ma.setVL();
-        assertEquals("[INFO] [main] [18/10/2024] = velocity test", ma.getLogAsString(0));
+        assertEquals("INFO - 18 10 2024 in main - velocity test", ma.getLogAsString(0));
         ma.discardLog(0);
     }
 

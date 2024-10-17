@@ -24,6 +24,7 @@ public class MemAppender {
     private static Appender append;
     private static String pattern;
     private static Layout layout;
+    private static Layout layoutV;
     private static long curSize;
     private static long discLogs;
     private static String layoutVP;
@@ -38,7 +39,7 @@ public class MemAppender {
         LOG = Logger.getLogger("Log");
         LOG.setLevel(Level.ALL);
         //the maxSize variable can be changed to suit however many the user wants
-        maxSize = 1000;
+        maxSize = 10;
         curSize = 0;
         discLogs = 0;
         //setup of the appender and the layout
@@ -53,21 +54,17 @@ public class MemAppender {
         vc = new VelocityContext();
         template = Velocity.getTemplate("template.vm");
         vc.put("c", "%c");
-        vc.put("d", "%d{dd/MM/yyyy}");
+        vc.put("d", "%d{dd MM yyyy}");
         vc.put("m", "%m");
         vc.put("p", "%p");
         vc.put("t", "%t");
         vc.put("n", "%n");
-        layout = new org.apache.log4j.PatternLayout(pattern);
         layoutVP = "Velocity";
         }
         //setup pattern layout
         public void setPL(String patternToBeUsed){
-            LOG.removeAppender(append);
-            append = LOG.getAppender("appender");
             pattern = patternToBeUsed;
             layout = new org.apache.log4j.PatternLayout(pattern);
-            LOG.addAppender(append);
             layoutVP = "Pattern";
         }
 
@@ -117,7 +114,9 @@ public class MemAppender {
             }
             discLogs += logList.size();
             curSize = 0;
-            logList.clear();
+            while(!logList.isEmpty()){
+                logList.removeFirst();
+            }
         }
         //this prints the current amount of logs discarded from memory
         public void getDiscardedLogCount () {
@@ -133,6 +132,9 @@ public class MemAppender {
         public long getMaxSize() {
             return maxSize;
         }
+        public void setMaxSize(long maxSize){
+            this.maxSize = maxSize;
+        }
         public long getCurSize(){return curSize;}
 
         public long getDiscLogs(){return discLogs;}
@@ -140,9 +142,11 @@ public class MemAppender {
 
         public String getLogAsString(int i){
             String s = "";
+            String p = "";
             StringWriter sw = new StringWriter();
             WriterAppender wa = new WriterAppender(layout, sw);
             StringWriter swV = new StringWriter();
+            WriterAppender waV;
             //if template chosen is normal Pattern
             if(layoutVP.equals("Pattern")) {
                 LOG.addAppender(wa);
@@ -151,10 +155,10 @@ public class MemAppender {
                 LOG.removeAppender(wa);
             //if template chosen is Velocity
             } else if(layoutVP.equals("Velocity")) {
-                template.merge(vc,sw);
-                pattern = sw.toString();
-                layout = new org.apache.log4j.PatternLayout(pattern);
-                WriterAppender waV = new WriterAppender(layout, swV);
+                template.merge(vc, sw);
+                p = sw.toString();
+                layoutV = new org.apache.log4j.PatternLayout(p);
+                waV = new WriterAppender(layoutV, swV);
                 LOG.addAppender(waV);
                 LOG.info(logList.get(i));
                 s = swV.toString();
