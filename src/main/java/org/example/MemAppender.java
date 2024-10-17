@@ -4,7 +4,9 @@ import org.apache.log4j.*;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 import org.apache.log4j.Logger;
@@ -27,7 +29,6 @@ public class MemAppender {
     private static String layoutVP;
 
     private static VelocityContext vc;
-    private static VelocityEngine ve;
     private static Template template;
 
     private MemAppender(){
@@ -50,11 +51,16 @@ public class MemAppender {
         //Setup velocity layout
         public void setVL(){
         vc = new VelocityContext();
-        ve = new VelocityEngine();
         template = Velocity.getTemplate("template.vm");
-        ve.setProperty( RuntimeConstants.RUNTIME_LOG_INSTANCE, "org.apache.velocity.runtime.log.Log4JLogChute");
-        ve.setProperty("runtime.log.logsystem.log4j.logger", "LOG");
         layoutVP = "Velocity";
+        vc.put("c", "%c");
+        vc.put("d", "%d{dd/MM/yyyy}");
+        vc.put("m", "%m");
+        vc.put("p", "%p");
+        vc.put("t", "%t");
+        vc.put("n", "%n");
+        layout = new org.apache.log4j.PatternLayout(pattern);
+
         }
         //setup pattern layout
         public void setPL(String patternToBeUsed){
@@ -135,17 +141,22 @@ public class MemAppender {
         public String getLogAsString(int i){
             String s = "";
             StringWriter sw = new StringWriter();
+            WriterAppender wa = new WriterAppender(layout, sw);
+            StringWriter swV = new StringWriter();
             if(layoutVP.equals("Pattern")) {
-                WriterAppender wa = new WriterAppender(layout, sw);
                 LOG.addAppender(wa);
                 LOG.info(logList.get(i));
                 s = sw.toString();
                 LOG.removeAppender(wa);
             } else if(layoutVP.equals("Velocity")) {
-                
-                vc.put("log", logList.get(i));
-                template.merge(vc, sw);
-                s = sw.toString();
+                template.merge(vc,sw);
+                pattern = sw.toString();
+                layout = new org.apache.log4j.PatternLayout(pattern);
+                WriterAppender waV = new WriterAppender(layout, swV);
+                LOG.addAppender(waV);
+                LOG.info(logList.get(i));
+                s = swV.toString();
+                LOG.removeAppender(waV);
             }
             return s;
         }

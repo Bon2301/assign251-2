@@ -47,6 +47,15 @@ public class Test3 {
         assertEquals(4,ma.getDiscLogs());
     }
 
+    @Test
+    public void VelocityTest(){
+        String s = "velocity test";
+        ma.addLog(s);
+        ma.setVL();
+        assertEquals("[INFO] [main] [17/10/2024] = velocity test", ma.getLogAsString(0));
+        ma.discardLog(0);
+    }
+
 
 
 }
