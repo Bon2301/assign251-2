@@ -28,13 +28,13 @@ public class Test3 {
     public void setLayoutTest() throws Exception{
         String pattern = "%m - %t - %d{dd MM yyyy} - %p";
         String s = "testing layout 1";
-        ma.setLayout(pattern);
+        ma.setPL(pattern);
         ma.addLog(s);
         assertEquals("testing layout 1 - main - 17 10 2024 - INFO", ma.getLogAsString(0));
         ma.discardLog(0);
         pattern = "%p - %d{dd MMM yyyy} in %t - %m";
         s = "testing layout 2";
-        ma.setLayout(pattern);
+        ma.setPL(pattern);
         ma.addLog(s);
         assertEquals("INFO - 17 Oct 2024 in main - testing layout 2", ma.getLogAsString(0));
         ma.discardLog(0);

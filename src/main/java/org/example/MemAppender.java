@@ -1,19 +1,19 @@
 package org.example;
 
-import jdk.jshell.spi.ExecutionControlProvider;
 import org.apache.log4j.*;
 
 import java.io.*;
-import java.text.DateFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
 import org.apache.log4j.Logger;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 
 public class MemAppender {
     private static Logger LOG;
@@ -24,6 +24,10 @@ public class MemAppender {
     private static Layout layout;
     private static long curSize;
     private static long discLogs;
+
+    private static VelocityContext vc;
+    private static VelocityEngine ve;
+    private static Template template;
 
     private MemAppender(){
         super();
@@ -41,6 +45,23 @@ public class MemAppender {
         layout = new org.apache.log4j.PatternLayout(pattern);
         LOG.addAppender(append);
     }
+        //Setup velocity layout
+        public void setVL(){
+        vc = new VelocityContext();
+        ve = new VelocityEngine();
+        template = Velocity.getTemplate("template.vm");
+        ve.setProperty( RuntimeConstants.RUNTIME_LOG_INSTANCE, "org.apache.velocity.runtime.log.Log4JLogChute");
+        ve.setProperty("runtime.log.logsystem.log4j.logger", "LOG");
+        ve.init();
+        }
+        //setup pattern layout
+        public void setPL(String patternToBeUsed){
+            LOG.removeAppender(append);
+            append = LOG.getAppender("appender");
+            pattern = patternToBeUsed;
+            layout = new org.apache.log4j.PatternLayout(pattern);
+            LOG.addAppender(append);
+        }
 
         //setup of the singleton pattern
         private static MemAppender instance = new MemAppender();
@@ -51,13 +72,7 @@ public class MemAppender {
             System.out.println("object successfully created");
         }
         //this function is used so the user can change the layout
-        public void setLayout(String patternToBeUsed){
-            LOG.removeAppender(append);
-            append = LOG.getAppender("appender");
-            pattern = patternToBeUsed;
-            layout = new org.apache.log4j.PatternLayout(pattern);
-            LOG.addAppender(append);
-        }
+
 
         //this function is used to add strings into the memory list ready to be logged
         public void addLog (String x){
