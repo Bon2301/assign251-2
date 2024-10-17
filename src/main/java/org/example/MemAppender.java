@@ -116,6 +116,7 @@ public class MemAppender {
                 LOG.info(logList.get(i));
             }
             discLogs += logList.size();
+            curSize = 0;
             logList.clear();
         }
         //this prints the current amount of logs discarded from memory

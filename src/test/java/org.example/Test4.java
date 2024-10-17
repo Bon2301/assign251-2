@@ -2,10 +2,9 @@ package org.example;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
-
-//stress tests
 public class Test4 {
     MemAppender ma2 = MemAppender.getInstance();
+
     @Test
     public void PatternLimitTest(){
         ma2.setPL("%p - %d{dd MM yyyy} in %t - %m");

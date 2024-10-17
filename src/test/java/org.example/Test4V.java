@@ -14,7 +14,7 @@ public class Test4V {
             assertEquals("[INFO] [main] [18/10/2024] = "+s, ma3.getLogAsString(i));
         }
         ma3.printLogs();
-        assertEquals(ma3.getMaxSize()+5, ma3.getDiscLogs());
+        assertEquals(ma3.getMaxSize()*2+5, ma3.getDiscLogs());
     }
 
 }
