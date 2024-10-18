@@ -5,6 +5,9 @@ import static org.junit.Assert.assertEquals;
 public class Test4 {
     MemAppender ma2 = MemAppender.getInstance();
 
+    //this code is used to test a max size of 1 and 50,000 for limit testing
+    //the discLogs variable is a weird number, because it counts all of the previous
+    //discarded logs from the other tests aswell
     @Test
     public void patternLimitTestLow(){
         ma2.setMaxSize(1);

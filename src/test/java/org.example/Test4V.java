@@ -5,6 +5,9 @@ import static org.junit.Assert.assertEquals;
 public class Test4V {
     MemAppender ma3 = MemAppender.getInstance();
 
+    //this code is used to test a max size of 1 and 50,000 for limit testing
+    //the discLogs variable is a weird number, because it counts all of the previous
+    //discarded logs from the other tests aswell
     @Test
     public void velocityLimitTestLow(){
         ma3.setMaxSize(1);

@@ -40,14 +40,17 @@ public class Test3 {
         ma.discardLog(0);
     }
 
+    //this test checks that the size variables work correctly.
     @Test
     public void sizeTest(){
         ma.setMaxSize(10);
         assertEquals(0, ma.getCurSize());
         assertEquals(10, ma.getMaxSize());
+        //at this point in the code, there should be 4 deleted logs.
         assertEquals(4,ma.getDiscLogs());
     }
 
+    //this code tests that the velocity template can be taken and used
     @Test
     public void VelocityTest(){
         String s = "velocity test";

@@ -137,6 +137,7 @@ public class MemAppender {
         public long getMaxSize() {
             return maxSize;
         }
+        //this is used to change the max size for tests.
         public void setMaxSize(long maxSize){
             this.maxSize = maxSize;
         }
@@ -145,6 +146,11 @@ public class MemAppender {
         public long getDiscLogs(){return discLogs;}
 
 
+    //this is used so that the Logs can be returned to the tests
+    //as strings.
+    //this is important because the logs can't otherwise be added
+    //to the tests are they are technically null when they
+    //print to the console.
         public String getLogAsString(int i){
             String s = "";
             String p = "";
