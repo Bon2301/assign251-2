@@ -34,6 +34,11 @@ public class MemAppender {
 
     private MemAppender(){
         super();
+        try {
+            Thread.sleep(5000);
+        } catch(InterruptedException e){
+            e.printStackTrace();
+        }
         //setup of the Logger
         BasicConfigurator.configure();
         LOG = Logger.getLogger("Log");
