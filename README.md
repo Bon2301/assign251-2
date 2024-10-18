@@ -3,4 +3,5 @@ Assignment 2
 Ben Mullinger 23010836
 
 
-The index.html created with the jacoco plugin can be found within target\site
+The index.html created with the jacoco plugin can be found within target\site\jacoco
+
